@@ -3,7 +3,7 @@ import Link from "next/link";
 /** Underlined tab bar; the active tab is decided by the page, so it works with query-string tabs too. */
 export default function Tabs({ tabs, active }: { tabs: { key: string; label: string; href: string }[]; active: string }) {
   return (
-    <nav className="mb-6 flex gap-1 overflow-x-auto border-b border-slate-200 text-sm">
+    <nav className="mb-6 flex gap-1 overflow-x-auto overflow-y-hidden border-b border-slate-200 text-sm">
       {tabs.map((t) => (
         <Link
           key={t.key}
