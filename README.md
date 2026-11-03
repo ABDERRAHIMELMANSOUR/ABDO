@@ -150,7 +150,11 @@ You don't need a Google Cloud project.
    Optionally, set `HR_SHEET_URL` to the sheet's link.
 5. Restart the app.
 
-Each first sign-in of the day adds a row to the **Pointage** tab: date, arrival time, name, username, status and the UTC timestamp.
+The sheet ("les retards") is a grid: dates down column A (`01/11/2026`, `02/11/2026`, ...) and one column per person in row 1 (`abderrahim`, `ikram`, `ayman`).
+Each first sign-in of the day fills the cell where that day meets that person, for example `09:14 En retard` on a yellow background or `08:52 Present` on green.
+A missing date row or person column is added automatically. The script fills the tab named `Sheet1`; change `SHEET_NAME` in `Code.gs` if you rename it.
+
+On Vercel, set `GOOGLE_SHEETS_WEBHOOK_URL` and `GOOGLE_SHEETS_WEBHOOK_SECRET` under **Settings → Environment Variables**, then redeploy.
 
 If Google can't be reached, the arrival is still saved. **Attendance** shows it as failed and has a **Retry** button.
 After editing `Code.gs`, redeploy it with **Manage deployments → New version**.

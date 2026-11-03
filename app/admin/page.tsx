@@ -32,8 +32,8 @@ export default async function AdminOverview() {
       {!sheetsConfigured() && (
         <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
           Google Sheets isn't connected yet, so arrivals are only saved here. Set{" "}
-          <code className="font-mono">GOOGLE_SHEETS_WEBHOOK_URL</code> in{" "}
-          <code className="font-mono">.env.local</code> (see the README).
+          <code className="font-mono">GOOGLE_SHEETS_WEBHOOK_URL</code> in your environment variables (Vercel: Settings → Environment
+          Variables), then redeploy. See the README.
         </div>
       )}
 
