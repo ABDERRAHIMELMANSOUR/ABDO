@@ -167,8 +167,8 @@ After editing `Code.gs`, redeploy it with **Manage deployments → New version**
 | `WORK_START_TIME`    | `09:00`             | Arrivals after this time are `En retard`      |
 | `LATE_GRACE_MINUTES` | `0`                 | Optional tolerance added to the start time    |
 
-Only employees (Ikram and Ayman) are punched in. Admin sign-ins aren't logged.
-Arrival is recorded on the first sign-in of the day. It is also recorded the first time the dashboard opens that day, so it still works for anyone who stayed signed in overnight.
+Everyone is punched in, Abderrahim included.
+Arrival is recorded on the first sign-in of the day. It is also recorded the first time the dashboard (or, for the admin, the overview) opens that day, so it still works for anyone who stayed signed in overnight.
 
 ## Deploying
 

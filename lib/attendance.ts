@@ -4,12 +4,10 @@ import { sendToSheet } from "./sheets";
 import { isLate, nowInTz } from "./time";
 
 /**
- * Records the employee's first connection of the day and pushes it to the HR sheet.
- * Safe to call on every login and dashboard visit: later calls the same day do nothing.
+ * Records a team member's first connection of the day (admins included) and pushes it to the HR sheet.
+ * Safe to call on every login and page visit: later calls the same day do nothing.
  */
 export async function recordPunchIn(user: User) {
-  if (user.role !== "employee") return;
-
   const now = nowInTz();
   const status = isLate(now.time) ? "En retard" : "Present";
   const result = getDb()

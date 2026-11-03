@@ -43,14 +43,6 @@ export function listMembers(): User[] {
     .all() as User[];
 }
 
-export function listEmployees(): User[] {
-  return getDb()
-    .prepare(
-      "SELECT id, username, name, role, active FROM users WHERE role = 'employee' AND active = 1 ORDER BY name",
-    )
-    .all() as User[];
-}
-
 /** Everyone who can receive tasks: active admins first, then employees. */
 export function listAssignable(): User[] {
   return getDb()

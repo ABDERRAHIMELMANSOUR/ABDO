@@ -2,23 +2,26 @@ import Link from "next/link";
 import { AttendanceBadge } from "@/components/Badge";
 import PageHeader, { HrSheetLink } from "@/components/PageHeader";
 import Roadmap from "@/components/Roadmap";
+import { recordPunchIn } from "@/lib/attendance";
 import { requireUser } from "@/lib/auth";
-import { attendanceForDate, listAssignable, listEmployees, tasksForDate, weeklyTasks } from "@/lib/queries";
+import { attendanceForDate, listAssignable, tasksForDate, weeklyTasks } from "@/lib/queries";
 import { sheetsConfigured } from "@/lib/sheets";
 import { formatDate, formatWeek, hhmm, todayInTz, weekStart, workStartLabel } from "@/lib/time";
 
 export default async function AdminOverview() {
-  await requireUser("admin");
+  const user = await requireUser("admin");
+  // Covers an admin who stays signed in overnight and opens the overview next morning.
+  await recordPunchIn(user);
   const today = todayInTz();
   const week = weekStart(today);
-  const employees = listEmployees();
+  const members = listAssignable();
   const roadmap = weeklyTasks(week);
   const attendance = new Map(attendanceForDate(today).map((a) => [a.user_id, a]));
   const tasks = tasksForDate(today);
 
   const onTime = [...attendance.values()].filter((a) => a.status === "Present").length;
   const late = [...attendance.values()].filter((a) => a.status === "En retard").length;
-  const notIn = employees.filter((e) => !attendance.has(e.id)).length;
+  const notIn = members.filter((e) => !attendance.has(e.id)).length;
   const done = tasks.filter((t) => t.status === "done").length;
 
   return (
@@ -51,7 +54,7 @@ export default async function AdminOverview() {
             Assign tasks →
           </Link>
         </div>
-        {employees.length === 0 ? (
+        {members.length === 0 ? (
           <p className="px-4 py-10 text-center text-sm text-slate-500">
             No team members yet.{" "}
             <Link href="/admin/team" className="font-medium text-indigo-600">
@@ -71,7 +74,7 @@ export default async function AdminOverview() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {employees.map((e) => {
+                {members.map((e) => {
                   const a = attendance.get(e.id);
                   const mine = tasks.filter((t) => t.assignee_id === e.id);
                   const mineDone = mine.filter((t) => t.status === "done").length;
@@ -118,7 +121,7 @@ export default async function AdminOverview() {
             Edit roadmap →
           </Link>
         </div>
-        <Roadmap members={listAssignable()} tasks={roadmap} />
+        <Roadmap members={members} tasks={roadmap} />
       </section>
     </>
   );

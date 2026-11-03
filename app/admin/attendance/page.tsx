@@ -18,7 +18,7 @@ export default async function AttendancePage({
   const from = isIsoDate(params.from) ? params.from : shiftDate(to, -6);
   const memberId = Number(params.member) || undefined;
 
-  const employees = listMembers().filter((m) => m.role === "employee");
+  const members = listMembers();
   const rows = attendanceBetween(from, to, memberId);
   const failed = rows.filter((r) => !r.sheet_synced).length;
   const late = rows.filter((r) => r.status === "En retard").length;
@@ -50,7 +50,7 @@ export default async function AttendancePage({
           </label>
           <select id="member" name="member" defaultValue={memberId ?? ""} className="input">
             <option value="">Everyone</option>
-            {employees.map((e) => (
+            {members.map((e) => (
               <option key={e.id} value={e.id}>
                 {e.name}
               </option>
